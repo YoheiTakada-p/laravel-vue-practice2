@@ -18,13 +18,13 @@ const router = new VueRouter({
     {
       path: '/login',
       component: Login,
-      // beforeEnter(to, from, next) {
-      //   if (store.getters['auth/check']) {
-      //     next('/')
-      //   } else {
-      //     next()
-      //   }
-      // }
+      beforeEnter(to, from, next) {
+        if (store.getters['auth/check']) {
+          next('/')
+        } else {
+          next()
+        }
+      }
     },
     {
       path: '/500',

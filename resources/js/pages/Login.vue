@@ -18,6 +18,14 @@
     </ul>
     <div class="panel" v-show="tab === 1">
       <form class="form" v-on:submit.prevent="login">
+        <div v-if="loginErrors" class="errors">
+          <ul v-if="loginErrors.email">
+            <li v-for="msg in loginErrors.email" :key="msg">{{ msg }}</li>
+          </ul>
+          <ul v-if="loginErrors.password">
+            <li v-for="msg in loginErrors.password" :key="msg">{{ msg }}</li>
+          </ul>
+        </div>
         <label for="login-email">Email</label>
         <input
           type="text"
@@ -39,6 +47,17 @@
     </div>
     <div class="panel" v-show="tab === 2">
       <form class="form" v-on:submit.prevent="register">
+        <div v-if="registerErrors" class="errors">
+          <ul v-if="registerErrors.name">
+            <li v-for="msg in registerErrors.name" :key="msg">{{ msg }}</li>
+          </ul>
+          <ul v-if="registerErrors.email">
+            <li v-for="msg in registerErrors.email" :key="msg">{{ msg }}</li>
+          </ul>
+          <ul v-if="registerErrors.password">
+            <li v-for="msg in registerErrors.password" :key="msg">{{ msg }}</li>
+          </ul>
+        </div>
         <label for="username">Name</label>
         <input
           type="text"
@@ -96,18 +115,13 @@ export default {
     login: function () {
       console.log(this.loginForm);
     },
-    register: function () {
-      this.$store
-        .dispatch("auth/register", this.registerForm)
-        .then(this.$router.push("/"));
-    },
-    // async register() {
-    //   // authストアのresigterアクションを呼び出す
-    //   await this.$store.dispatch("auth/register", this.registerForm);
+    register: async function () {
+      await this.$store.dispatch("auth/register", this.registerForm);
 
-    //   // トップページに移動する
-    //   this.$router.push("/");
-    // },
+      if (this.apiStatus) {
+        this.$router.push("/");
+      }
+    },
     login: async function () {
       await this.$store.dispatch("auth/login", this.loginForm);
 
@@ -115,10 +129,23 @@ export default {
         this.$router.push("/");
       }
     },
+    clearError: function () {
+      this.$store.commit("auth/setLoginErrorMessages", null);
+      this.$store.commit("auth/setRegisterErrorMessages", null);
+    },
+  },
+  created() {
+    this.clearError();
   },
   computed: {
     apiStatus: function () {
       return this.$store.state.auth.apiStatus;
+    },
+    loginErrors: function () {
+      return this.$store.state.auth.loginErrorMessages;
+    },
+    registerErrors: function () {
+      return this.$store.state.auth.registerErrorMessages;
     },
   },
 };

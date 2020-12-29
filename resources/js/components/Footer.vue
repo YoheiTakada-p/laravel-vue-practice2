@@ -12,15 +12,20 @@
 <script>
 export default {
   methods: {
-    logout: function () {
-      this.$store
-        .dispatch("auth/logout")
-        .then(this.$router.push("/").catch((err) => {}));
+    logout: async function () {
+      await this.$store.dispatch("auth/logout");
+
+      if (this.apiStatus) {
+        this.$router.push("/").catch((err) => {});
+      }
     },
   },
   computed: {
     isLogin: function () {
       return this.$store.getters["auth/check"];
+    },
+    apiStatus: function () {
+      return this.$store.state.auth.apiStatus;
     },
   },
 };
