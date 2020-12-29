@@ -5,6 +5,7 @@
  */
 
 import router from './router'
+import store from './store'
 import App from './App.vue'
 
 require('./bootstrap');
@@ -30,9 +31,16 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-const app = new Vue({
-    el: '#app',
-    router,
-    components: { App },
-    template: '<App />'
-});
+const app = async () => {
+    await store.dispatch('auth/currentUser')
+
+    new Vue({
+        el: '#app',
+        router,
+        store,
+        components: { App },
+        template: '<App />'
+    });
+}
+
+app()
