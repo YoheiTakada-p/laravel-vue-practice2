@@ -4,10 +4,9 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
+//追加
+use Illuminate\Http\UploadedFile;
 use App\User;
 use App\Photo;
 
@@ -28,7 +27,7 @@ class PhotoSubmitApiTest extends TestCase
     {
         //S3ではなくテスト用のストレージを使用する
         //storage/framework/testing
-        Storage::fake('s3');
+        \Storage::fake('s3');
 
         $response = $this->actingAs($this->user)
             ->json(
@@ -45,7 +44,7 @@ class PhotoSubmitApiTest extends TestCase
         //写真のIDが12桁のランダムな文字列であること
         $this->assertMatchesRegularExpression('/^[0-9a-z]{12}$/', $photo->id);
         //DBに挿入されたファイル名のファイルがストレージに保存されていること
-        Storage::cloud()->assertExists($photo->filename);
+        \Storage::cloud()->assertExists($photo->filename);
     }
     /**
      * @test
@@ -54,9 +53,9 @@ class PhotoSubmitApiTest extends TestCase
     {
 
         //エラー
-        Schema::drop('photos');
+        \Schema::drop('photos');
 
-        Storage::fake('s3');
+        \Storage::fake('s3');
 
         $response = $this->actingAs($this->user)
             ->json('POST', route('photo.create'), [
@@ -66,7 +65,7 @@ class PhotoSubmitApiTest extends TestCase
         //assert
         $response->assertStatus(500);
 
-        $this->assertEquals(0, count(Storage::cloud()->files()));
+        $this->assertEquals(0, count(\Storage::cloud()->files()));
     }
     /**
      * @test
@@ -74,7 +73,7 @@ class PhotoSubmitApiTest extends TestCase
     public function should_ファイル保存エラーの場合はDBへの挿入はしない()
     {
         //ストレージをモックして保存時にエラーを起こさせる
-        Storage::shouldReceive('cloud')->once()->andReturnNull();
+        \Storage::shouldReceive('cloud')->once()->andReturnNull();
 
         $response = $this->actingAs($this->user)
             ->json('POST', route('photo.create'), [

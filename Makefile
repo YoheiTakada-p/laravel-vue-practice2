@@ -14,3 +14,5 @@ refresh:
 	php artisan migrate:refresh
 seed:
 	php artisan migrate --seed
+test:
+	./vendor/bin/phpunit --testdox

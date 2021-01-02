@@ -3,8 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-//ヘルパ
-use Illuminate\Support\Arr;
 
 class Photo extends Model
 {
@@ -19,7 +17,7 @@ class Photo extends Model
     {
         parent::__construct($attributes);
 
-        if (!$this->attributes) {
+        if (!\Arr::get($this->attributes, 'id')) {
             $this->setId();
         }
     }

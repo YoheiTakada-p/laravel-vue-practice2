@@ -15,10 +15,10 @@
 //     return view('welcome');
 // });
 
-// Route::get('/{any}', function () {
-//     return view('index');
-// })->where('any', '.*');
+Route::get('/{any}', function () {
+    return view('index');
+})->where('any', '.*');
 
-Route::get('/dd', function () {
-    return dd(app());
-});
+// Route::get('/dd', function () {
+//     return dd(app());
+// });

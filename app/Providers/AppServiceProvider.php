@@ -13,8 +13,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
-        $this->app->singleton('App\Providers\sample', 'sample');
+        //test
+        $this->app->bind('sample', 'App\Providers\sample');
     }
 
     /**

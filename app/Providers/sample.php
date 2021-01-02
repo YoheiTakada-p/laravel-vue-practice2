@@ -4,8 +4,29 @@ namespace App\Providers;
 
 class sample
 {
-    public function test()
+
+    public $resolve;
+
+    public function __construct(resolve $resolve)
     {
-        return 'yohei';
+        var_dump($resolve);
+        $this->resolve = $resolve;
+    }
+
+    public function test2()
+    {
+        return 'test2';
+    }
+    public function test1()
+    {
+        return $this->resolve->test();
+    }
+    public function test3()
+    {
+        return $this->resolve->test3;
+    }
+    public function var()
+    {
+        return var_dump($this->resolve);
     }
 }

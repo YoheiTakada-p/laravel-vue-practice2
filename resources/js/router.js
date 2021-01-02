@@ -5,6 +5,7 @@ import PhotoList from './pages/PhotoList.vue'
 import Login from './pages/Login.vue'
 import store from './store'
 import SystemError from './pages/errors/System.vue'
+import SampleParent from './pages/SampleParent.vue'
 
 Vue.use(VueRouter)
 
@@ -14,6 +15,10 @@ const router = new VueRouter({
     {
       path: '/',
       component: PhotoList
+    },
+    {
+      path: '/sample',
+      component: SampleParent
     },
     {
       path: '/login',

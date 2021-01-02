@@ -6,10 +6,6 @@ use Illuminate\Http\Request;
 //追加
 use App\Photo;
 use App\Http\Requests\StorePhoto;
-//サポート
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 
 class PhotoController extends Controller
 {
@@ -34,18 +30,18 @@ class PhotoController extends Controller
         $photo->filename = $photo->id . '.' . $extension;
 
         //S3にファイルを保存する
-        Storage::cloud()->putFileAs('', $request->photo, $photo->filename, 'public');
+        \Storage::cloud()->putFileAs('', $request->photo, $photo->filename, 'public');
 
         //データベースエラー時にファイル削除を行うためトランザクションを利用する
-        DB::beginTransaction();
+        \DB::beginTransaction();
 
         try {
-            Auth::user()->photos()->save($photo);
-            DB::commit();
+            \Auth::user()->photos()->save($photo);
+            \DB::commit();
         } catch (\Exception $exception) {
-            DB::rollBack();
+            \DB::rollBack();
             //DBとの不整合を避けるためアップロードしたファイルを削除
-            Storage::cloud()->delete($photo->filename);
+            \Storage::cloud()->delete($photo->filename);
             throw $exception;
         }
 
