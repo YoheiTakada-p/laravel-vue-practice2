@@ -112,9 +112,6 @@ export default {
     };
   },
   methods: {
-    login: function () {
-      console.log(this.loginForm);
-    },
     register: async function () {
       await this.$store.dispatch("auth/register", this.registerForm);
 

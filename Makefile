@@ -15,4 +15,6 @@ refresh:
 seed:
 	php artisan migrate --seed
 test:
-	./vendor/bin/phpunit --testdox
+	"./vendor/bin/phpunit" --testdox
+sql:
+	mysql -u root -P 3306 -p

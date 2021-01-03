@@ -15,7 +15,7 @@
         </RouterLink>
       </div>
     </div>
-    <PhotoForm v-bind:value="showForm" />
+    <PhotoForm v-bind:value="showForm" v-on:input="showForm = $event" />
   </nav>
 </template>
 
