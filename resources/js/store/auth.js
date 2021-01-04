@@ -32,8 +32,8 @@ const actions = {
     context.commit('setApiStatus', null)
 
     const response = await axios.post('/api/register', data)
-      .catch((err) => err.response || err)
-    console.log(response.status)
+      .catch((error) => error.response)
+
     if (response.status === 201) {
       context.commit('setApiStatus', true)
       context.commit('setUser', response.data)
@@ -55,7 +55,7 @@ const actions = {
     context.commit('setApiStatus', null)
 
     const response = await axios.post('/api/login', data)
-      .catch((err) => err.response || err)
+      .catch((error) => error.response)
 
     if (response.status === 200) {
       context.commit('setApiStatus', true)
@@ -75,7 +75,7 @@ const actions = {
 
     context.commit('setApiStatus', null)
     const response = await axios.post('/api/logout')
-      .catch((err) => err.response || err)
+      .catch((error) => error.response)
 
     if (response.status === 200) {
       context.commit('setApiStatus', true)
@@ -91,7 +91,7 @@ const actions = {
 
     context.commit('setApiStatus', null)
     const response = await axios.get('/api/user')
-      .catch((err) => err.response || err)
+      .catch((error) => error.response)
 
     if (response.status === 200) {
       context.commit('setApiStatus', true)

@@ -44,7 +44,7 @@ class PhotoController extends Controller
             throw $exception;
         }
 
-        //リソースの新規作成なのでレスポンスコードは201を返却する
+        //新規作成なので201を返却する
         return response($photo, 201);
     }
 }

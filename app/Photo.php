@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Photo extends Model
 {
+    //intにキャストさせない
+    public $incrementing = false;
     /**
      * 12桁のランダムな文字列をIDとして設定する
      */
