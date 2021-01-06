@@ -16,6 +16,17 @@ class PhotoController extends Controller
     }
 
     /**
+     * 写真取得
+     */
+    public function index() {
+
+        $photos = Photo::with(['owner'])
+        ->orderBy(Photo::CREATED_AT, 'desc')->paginate();
+
+        return $photos;
+    }
+
+    /**
      * 写真投稿
      */
     public function create(StorePhoto $request)

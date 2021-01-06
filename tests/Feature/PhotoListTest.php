@@ -7,11 +7,18 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 //add
 use App\Photo;
+use App\User;
 
 class PhotoListTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = factory(User::class)->create();
+    }
     /**
      * @test
      */
@@ -19,6 +26,13 @@ class PhotoListTest extends TestCase
     {
         factory(Photo::class, 5)->create();
 
-        echo Photo::all();
+        $response = $this->actingAs($this->user)->json('GET', route('photo.index'));
+
+        //withメソッドでownerに作成日の降順でデータを作成する
+        $photos = Photo::with(['owner'])->orderby('created_at', 'desc')->get();
+
+        echo $photos->first();
+
+        $response->assertStatus(200);
     }
 }
