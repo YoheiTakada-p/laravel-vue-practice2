@@ -33,6 +33,7 @@ class Photo extends Model
     //ランダムなID値を生成する
     private function getRandomId()
     {
-        return substr(str_shuffle('1234567890abcdefghijklmnopqrstuvwxyz'), 0, 12);
+        return \Str::random(12);
+        // return substr(str_shuffle('1234567890abcdefghijklmnopqrstuvwxyz'), 0, 12);
     }
 }
