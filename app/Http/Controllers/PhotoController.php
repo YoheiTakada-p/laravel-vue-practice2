@@ -12,7 +12,7 @@ class PhotoController extends Controller
     //
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except(['index', 'download']);
     }
 
     /**
@@ -24,6 +24,24 @@ class PhotoController extends Controller
         ->orderBy(Photo::CREATED_AT, 'desc')->paginate();
 
         return $photos;
+    }
+
+    /**
+     *写真ダウンロード
+     */
+    public function download(Photo $photo)
+    {
+        if (! \Storage::cloud()->exists($photo->filename)) {
+            abort(404);
+        };
+
+        $disposition = 'attachment; filename="' . $photo->filename . '"';
+        $headers = [
+            'Content-Type' => 'application/octet-stream',
+            'Content-Disposition' => $disposition,
+        ];
+
+        return response(\Storage::cloud()->get($photo->filename), 200, $headers);
     }
 
     /**

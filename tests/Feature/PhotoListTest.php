@@ -13,12 +13,6 @@ class PhotoListTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->user = factory(User::class)->create();
-    }
     /**
      * @test
      */
@@ -26,13 +20,30 @@ class PhotoListTest extends TestCase
     {
         factory(Photo::class, 5)->create();
 
-        $response = $this->actingAs($this->user)->json('GET', route('photo.index'));
+        $response = $this->json('GET', route('photo.index'));
 
         //withメソッドでownerに作成日の降順でデータを作成する
         $photos = Photo::with(['owner'])->orderby('created_at', 'desc')->get();
 
-        echo $photos->first();
+        //オブジェクトをJSON形式で表現する
+        $json_data = $photos->map(function ($photo) {
+            return [
+                'id' => $photo->id,
+                'url' => $photo->url,
+                'owner' => [
+                    'name' => $photo->owner->name
+                ]
+            ];
+        })
+        ->all();
 
-        $response->assertStatus(200);
+
+        $response->assertStatus(200)
+            // レスポンスJSONのdata項目に含まれる要素が5つであること
+            ->assertJsonCount(5, 'data')
+            // レスポンスJSONのdata項目が期待値と合致すること
+            ->assertJsonFragment([
+                'data' => $json_data,
+            ]);
     }
 }

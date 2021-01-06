@@ -9,7 +9,7 @@ class Photo extends Model
     //intにキャストさせない
     public $incrementing = false;
 
-    //Json
+    //取得したJSONに追加する
     protected $appends = [
         'url'
     ];
@@ -17,13 +17,13 @@ class Photo extends Model
     protected $visible = [
         'id', 'owner', 'url',
     ];
-    /**
-     * 12桁のランダムな文字列をIDとして設定する
-     */
 
     //オーバーライド
     protected $keyType = 'string';
 
+    /**
+     * 12桁のランダムな文字列をIDとして設定する
+     */
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
