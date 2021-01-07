@@ -8,7 +8,7 @@
       />
       <router-link
         class="photo__overlay"
-        :to="'/photos/' + item.id"
+        v-bind:to="'/photos/' + item.id"
         v-bind:title="'View the photo by ' + item.owner.name"
       >
         <div class="photo__controls">
