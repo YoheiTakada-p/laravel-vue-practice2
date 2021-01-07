@@ -41,6 +41,40 @@ class PhotoController extends Controller
     }
 
     /**
+     * お気に入り追加
+     */
+    public function like(String $id)
+    {
+        $photo = Photo::where('id', $id)->with(['likes'])->first();
+
+        if (!$photo) {
+            abort(404);
+        }
+
+        //2回お気に入り出来ないように消してから登録する
+        $photo->likes()->detach(\Auth::user()->id);
+        $photo->likes()->attach(\Auth::user()->id);
+
+        return ["photo_id" => $id];
+    }
+
+    /**
+     * お気に入り削除
+     */
+    public function unlike(String $id)
+    {
+        $photo = Photo::where('id', $id)->with(['likes'])->first();
+
+        if (!$photo) {
+            abort(404);
+        }
+
+        $photo->likes()->detach(\Auth::user()->id);
+
+        return ["photo_id" => $id];
+    }
+
+    /**
      * コメント追加
      */
     public function addComment(Photo $photo, StoreComment $request)

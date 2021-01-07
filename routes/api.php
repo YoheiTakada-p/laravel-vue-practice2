@@ -33,6 +33,10 @@ Route::get('/photos', 'PhotoController@index')->name('photo.index');
 Route::get('/photos/{id}', 'PhotoController@show')->name('photo.show');
 //コメント追加
 Route::post('/photos/{photo}/comments', 'PhotoController@addComment')->name('photo.comment');
+//お気に入り登録
+Route::put('/photos/{id}/like', 'PhotoController@like')->name('photo.like');
+//お気に入り削除
+Route::delete('photos/{id}/like', 'photoController@unlike')->name('photo.like');
 
 //testApi
 Route::get('/test', 'TestController@test');

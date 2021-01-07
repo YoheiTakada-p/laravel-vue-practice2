@@ -18,7 +18,7 @@ class Photo extends Model
     ];
     //JSONに含める属性
     protected $visible = [
-        'id', 'owner', 'url', 'comments'
+        'id', 'owner', 'url', 'comments', 'likes'
     ];
 
     //オーバーライド
@@ -72,5 +72,13 @@ class Photo extends Model
     public function comments()
     {
         return $this->hasMany('App\Comment')->orderBy('id', 'desc');
+    }
+
+    /**
+     * リレーションシップ - likesテーブル
+     */
+    public function likes()
+    {
+        return $this->belongsToMany('App\User', 'likes')->withTimestamps();
     }
 }

@@ -38,9 +38,6 @@ class AddCommentApiTest extends TestCase
 
         $comments = $photo->comments()->get();
 
-        echo $comments;
-
-
         $response->assertStatus(201)
             ->assertJsonFragment([
                 "author" => [
