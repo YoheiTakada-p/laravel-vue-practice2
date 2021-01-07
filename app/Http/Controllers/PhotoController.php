@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 //追加
 use App\Photo;
+use App\Comment;
 use App\Http\Requests\StorePhoto;
+use App\Http\Requests\StoreComment;
 
 class PhotoController extends Controller
 {
@@ -36,6 +38,21 @@ class PhotoController extends Controller
         $photo = Photo::where('id', $id)->with(['owner', 'comments.author'])->first();
 
         return $photo ?? abort(404);
+    }
+
+    /**
+     * コメント追加
+     */
+    public function addComment(Photo $photo, StoreComment $request)
+    {
+        $comment = new Comment();
+        $comment->content = $request->get('content');
+        $comment->user_id = \Auth::user()->id;
+        $photo->comments()->save($comment);
+
+        $new_comment = Comment::where('id', $comment->id)->with(['author'])->first();
+
+        return response($new_comment, 201);
     }
 
     /**
