@@ -35,10 +35,12 @@ class PhotoListTest extends TestCase
                 ]
             ];
         })
-        ->all();
+            ->all();
 
 
         $response->assertStatus(200)
+
+            //PhotoModelのperPageで結果が変わってしまう
             // レスポンスJSONのdata項目に含まれる要素が5つであること
             ->assertJsonCount(5, 'data')
             // レスポンスJSONのdata項目が期待値と合致すること

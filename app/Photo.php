@@ -10,7 +10,7 @@ class Photo extends Model
     public $incrementing = false;
 
     //1ページあたりの表示数
-    protected $perPage = 1;
+    protected $perPage = 15;
 
     //取得したJSONに追加する
     protected $appends = [

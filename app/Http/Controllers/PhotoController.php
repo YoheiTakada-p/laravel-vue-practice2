@@ -12,18 +12,30 @@ class PhotoController extends Controller
     //
     public function __construct()
     {
-        $this->middleware('auth')->except(['index', 'download']);
+        $this->middleware('auth')->except(['index', 'download', 'show']);
     }
 
     /**
      * 写真取得
      */
-    public function index() {
+    public function index()
+    {
 
         $photos = Photo::with(['owner'])
-        ->orderBy(Photo::CREATED_AT, 'desc')->paginate();
+            ->orderBy(Photo::CREATED_AT, 'desc')->paginate();
 
         return $photos;
+    }
+
+    /**
+     * 写真詳細
+     */
+    public function show(String $id)
+    {
+
+        $photo = Photo::where('id', $id)->with(['owner'])->first();
+
+        return $photo ?? abort(404);
     }
 
     /**
@@ -31,7 +43,7 @@ class PhotoController extends Controller
      */
     public function download(Photo $photo)
     {
-        if (! \Storage::cloud()->exists($photo->filename)) {
+        if (!\Storage::cloud()->exists($photo->filename)) {
             abort(404);
         };
 
