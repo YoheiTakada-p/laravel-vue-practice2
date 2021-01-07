@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 //add
 use App\Photo;
+use App\Comment;
 
 class PhotoDetailTest extends TestCase
 {
@@ -18,7 +19,9 @@ class PhotoDetailTest extends TestCase
     public function should_写真詳細のJSONを取得する()
     {
 
-        factory(Photo::class)->create();
+        factory(Photo::class)->create()->each(function ($photo) {
+            $photo->comments()->saveMany(factory(Comment::class, 3)->make());
+        });
 
         $photo = Photo::first();
 
@@ -32,7 +35,18 @@ class PhotoDetailTest extends TestCase
                 'url' => $photo->url,
                 'owner' => [
                     'name' => $photo->owner->name
-                ]
+                ],
+                'comments' => $photo->comments
+                    ->sortByDesc('id')
+                    ->map(function ($comment) {
+                        return [
+                            'author' => [
+                                'name' => $comment->author->name
+                            ],
+                            'content' => $comment->content
+                        ];
+                    })
+                    ->all()
             ]);
     }
 }
