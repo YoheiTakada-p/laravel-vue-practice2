@@ -6,9 +6,9 @@
         v-bind:src="item.url"
         v-bind:alt="'photo by ' + item.owner.name"
       />
-      <RouteLink
+      <router-link
         class="photo__overlay"
-        v-bind:to="'/photos/' + item.id"
+        :to="'/photos/' + item.id"
         v-bind:title="'View the photo by ' + item.owner.name"
       >
         <div class="photo__controls">
@@ -27,7 +27,7 @@
         <div class="photo__username">
           {{ item.owner.name }}
         </div>
-      </RouteLink>
+      </router-link>
     </figure>
   </div>
 </template>

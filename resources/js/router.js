@@ -31,7 +31,7 @@ const router = new VueRouter({
     {
       path: '/photos/:id',
       component: PhotoDetail,
-      props: true
+      props: true,
     },
     {
       path: '/login',
