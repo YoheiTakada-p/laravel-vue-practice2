@@ -37,6 +37,11 @@ Route::post('/photos/{photo}/comments', 'PhotoController@addComment')->name('pho
 Route::put('/photos/{id}/like', 'PhotoController@like')->name('photo.like');
 //お気に入り削除
 Route::delete('photos/{id}/like', 'photoController@unlike')->name('photo.like');
+//トークンリフレッシュ
+Route::get('refresh-token', function (Illuminate\Http\Request $request) {
+    $request->session()->regenerateToken();
+    return response()->json();
+});
 
 //testApi
 Route::get('/test', 'TestController@test');

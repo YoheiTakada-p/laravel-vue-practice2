@@ -31,9 +31,15 @@ export default {
   },
   watch: {
     errorCode: {
-      handler(val) {
+      async handler(val) {
         if (val === 500) {
           this.$router.push("/500");
+        } else if (val === 419) {
+          await axios.get("/api/refresh-token");
+          this.$store.commit("auth/setUser", null);
+          this.$router.push("/login");
+        } else if (val === 404) {
+          this.$router.push("*");
         }
       },
       immediate: true,
