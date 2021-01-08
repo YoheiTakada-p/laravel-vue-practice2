@@ -6,14 +6,19 @@
         v-bind:src="item.url"
         v-bind:alt="'photo by ' + item.owner.name"
       />
-      <router-link
+      <RouterLink
         class="photo__overlay"
         v-bind:to="'/photos/' + item.id"
         v-bind:title="'View the photo by ' + item.owner.name"
       >
         <div class="photo__controls">
-          <button class="photo__action photo__action--link" title="Like photo">
-            <i class="icon ion-md-heart"></i>12
+          <button
+            class="photo__action photo__action--link"
+            :class="{ 'photo__action--liked': item.liked_by_user }"
+            title="Like photo"
+            v-on:click="like"
+          >
+            <i class="icon ion-md-heart"></i>{{ item.likes_count }}
           </button>
           <a
             class="photo__action"
@@ -27,7 +32,7 @@
         <div class="photo__username">
           {{ item.owner.name }}
         </div>
-      </router-link>
+      </RouterLink>
     </figure>
   </div>
 </template>
@@ -38,6 +43,14 @@ export default {
     item: {
       type: Object,
       required: true,
+    },
+  },
+  methods: {
+    like: function () {
+      this.$emit("like", {
+        id: this.item.id,
+        liked: this.item.liked_by_user,
+      });
     },
   },
 };

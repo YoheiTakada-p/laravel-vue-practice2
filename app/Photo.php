@@ -14,11 +14,11 @@ class Photo extends Model
 
     //取得したJSONに追加する
     protected $appends = [
-        'url'
+        'url', 'likes_count', 'liked_by_user'
     ];
     //JSONに含める属性
     protected $visible = [
-        'id', 'owner', 'url', 'comments', 'likes'
+        'id', 'owner', 'url', 'comments', 'likes_count', 'liked_by_user',
     ];
 
     //オーバーライド
@@ -56,6 +56,28 @@ class Photo extends Model
     public function getUrlAttribute()
     {
         return \Storage::cloud()->url($this->attributes['filename']);
+    }
+
+    /**
+     * アクセサ - likes_count
+     */
+    public function getLikesCountAttribute()
+    {
+        return $this->likes->count();
+    }
+
+    /**
+     * アクセサ - liked_by_user
+     */
+    public function getLikedByUserAttribute()
+    {
+        if (\Auth::guest()) {
+            return false;
+        }
+
+        return $this->likes->contains(function ($user) {
+            return $user->id === \Auth::user()->id;
+        });
     }
 
     /**

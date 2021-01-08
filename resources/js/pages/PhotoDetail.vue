@@ -12,8 +12,12 @@
       <figcaption>Posted by {{ photo.owner.name }}</figcaption>
     </figure>
     <div class="photo-detail__pane">
-      <button class="button button--like" title="Like photo">
-        <i class="icon ion-md-heart"></i>12
+      <button
+        class="button button--like"
+        title="Like photo"
+        v-on:click="onLikeClick"
+      >
+        <i class="icon ion-md-heart"></i>{{ photo.likes_count }}
       </button>
       <a
         v-bind:href="'/photos/' + photo.id + '/download'"
@@ -104,6 +108,44 @@ export default {
       }
 
       this.photo.comments = [response.data, ...this.photo.comments];
+    },
+    onLikeClick: function () {
+      if (!this.$store.getters["auth/check"]) {
+        alert("いいね機能はログインをしてからね！");
+        return false;
+      }
+
+      if (this.photo.liked_by_user) {
+        this.unlike();
+      } else {
+        this.like();
+      }
+    },
+    like: async function () {
+      const response = await axios
+        .put("/api/photos/" + this.photo.id + "/like")
+        .catch((error) => error.response);
+
+      if (response.status !== 200) {
+        this.$store.commit("error/setCode", response.status);
+        return false;
+      }
+
+      this.photo.likes_count = this.photo.likes_count + 1;
+      this.photo.liked_by_user = true;
+    },
+    unlike: async function () {
+      const response = await axios
+        .delete("/api/photos/" + this.photo.id + "/like")
+        .catch((error) => error.response);
+
+      if (response.status !== 200) {
+        this.$store.commit("error/setCode", response.status);
+        return false;
+      }
+
+      this.photo.likes_count = this.photo.likes_count - 1;
+      this.photo.liked_by_user = false;
     },
   },
   computed: {

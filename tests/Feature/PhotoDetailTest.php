@@ -25,6 +25,8 @@ class PhotoDetailTest extends TestCase
 
         $photo = Photo::first();
 
+        $a = Photo::first()->with(['owner'])->first();
+        echo $a;
         $response = $this->json('GET', route('photo.show', [
             'id' => $photo->id
         ]));
@@ -36,6 +38,8 @@ class PhotoDetailTest extends TestCase
                 'owner' => [
                     'name' => $photo->owner->name
                 ],
+                'liked_by_user' => false,
+                'likes_count' => 0,
                 'comments' => $photo->comments
                     ->sortByDesc('id')
                     ->map(function ($comment) {

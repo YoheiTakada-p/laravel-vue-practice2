@@ -32,7 +32,9 @@ class PhotoListTest extends TestCase
                 'url' => $photo->url,
                 'owner' => [
                     'name' => $photo->owner->name
-                ]
+                ],
+                'likes_count' => 0,
+                'liked_by_user' => false
             ];
         })
             ->all();
